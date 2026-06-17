@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+
+# Coverage
+coverage/
+
+# Claude
+AGENTS.md
+CLAUDE.md
+CODE_REVIEW.md
+progression.md
+rapport.md
+README-template.md
+OBJECTIFS.md

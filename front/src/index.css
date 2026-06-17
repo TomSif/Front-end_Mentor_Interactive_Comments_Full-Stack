@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  /* Primary */
+  --color-purple-600: hsl(238, 40%, 52%);
+  --color-purple-200: hsl(239, 57%, 85%);
+  --color-pink-400: hsl(358, 79%, 66%);
+  --color-pink-200: hsl(357, 100%, 86%);
+
+  /* Neutral */
+  --color-grey-800: hsl(212, 24%, 26%);
+  --color-grey-500: hsl(211, 10%, 45%);
+  --color-grey-100: hsl(223, 19%, 93%);
+  --color-grey-50: hsl(228, 33%, 97%);
+
+  /* Typography */
+  --font-sans: 'Rubik', sans-serif;
+}
+
+@utility text-preset-1 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+@utility text-preset-2-medium {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+@utility text-preset-2-regular {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+@utility text-preset-3 {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
