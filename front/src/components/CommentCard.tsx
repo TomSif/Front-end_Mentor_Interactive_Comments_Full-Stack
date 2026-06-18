@@ -89,9 +89,9 @@ const CommentCard = ({
       </article>
       {replies && (
         <div className="flex h-full flex-row">
-          <div className="border-grey-100 hidden w-11 border-r-2 border-dotted pl-11 md:block"></div>
-          <ul className="flex flex-col gap-4 pl-4 md:pl-11">
-            {replies?.map((reply) => (
+          <div className="border-grey-100 hidden w-11 border-r-2 border-solid pl-11 md:block"></div>
+          <ul className="flex w-full flex-col gap-4 pl-4 md:pl-11">
+            {replies.map((reply) => (
               <li key={reply.id}>
                 <CommentCard
                   id={reply.id}
