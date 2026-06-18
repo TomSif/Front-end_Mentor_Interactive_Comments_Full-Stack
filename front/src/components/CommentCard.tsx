@@ -7,6 +7,7 @@ interface CommentCardProps {
   score: number
   user: User
   replies?: Reply[]
+  replyingTo?: string
 }
 
 const CommentCard = ({
@@ -16,6 +17,7 @@ const CommentCard = ({
   score,
   user,
   replies,
+  replyingTo,
 }: CommentCardProps) => {
   return (
     <div className="flex flex-col gap-4">
@@ -35,7 +37,10 @@ const CommentCard = ({
             </h2>
             <h3 className="text-preset-2-regular text-gray-500">{createdAt}</h3>
           </header>
-          <p className="text-preset-2-regular w-full text-gray-500">
+          <p className="text-preset-2-regular flex w-full gap-2 text-gray-500">
+            {!replies && (
+              <span className="font-bold text-purple-600">@{replyingTo}</span>
+            )}
             {content}
           </p>
         </div>
@@ -89,6 +94,7 @@ const CommentCard = ({
               createdAt={reply.createdAt}
               score={reply.score}
               user={reply.user}
+              replyingTo={reply.replyingTo}
             />
           </li>
         ))}
