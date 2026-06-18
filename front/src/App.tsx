@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { User, Comment } from '@/types'
 import getCommentsData from '@/services/comments'
+import CommentCard from './components/CommentCard'
 
 function App() {
   const [currentUser, setCurrentUser] = useState<User>()
@@ -21,10 +22,24 @@ function App() {
   }, [])
 
   return (
-    <main className="min-h-screen bg-[#F5F6FA]">
-      <h1 className="text-center text-xl font-bold text-[#334253]">
-        Interactive Comments Section
-      </h1>
+    <main className="bg-grey-50 min-h-screen w-full px-4 py-8">
+      <h1 className="sr-only">Interactive Comments Section</h1>
+      <ul className="flex flex-col">
+        {comments.map((comment) => {
+          return (
+            <li key={comment.id}>
+              <CommentCard
+                id={comment.id}
+                content={comment.content}
+                createdAt={comment.createdAt}
+                score={comment.score}
+                user={comment.user}
+                replies={comment.replies}
+              />
+            </li>
+          )
+        })}
+      </ul>
     </main>
   )
 }
