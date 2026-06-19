@@ -1,3 +1,5 @@
+import { Fragment } from 'react'
+import CommentInput from './CommentInput'
 import { User, Reply } from '@/types'
 
 interface CommentCardProps {
@@ -8,6 +10,10 @@ interface CommentCardProps {
   user: User
   replies?: Reply[]
   replyingTo?: string
+  activeReplyId?: number | null
+  currentUser: User
+  onReply: (id: number) => void
+  onAddReply?: (content: string) => void
 }
 
 const CommentCard = ({
@@ -18,9 +24,12 @@ const CommentCard = ({
   user,
   replies,
   replyingTo,
+  onReply,
+  activeReplyId,
+  currentUser,
 }: CommentCardProps) => {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
       <article
         key={id}
         className="relative flex w-full flex-col gap-4 rounded-xl bg-white p-4 md:flex-row-reverse md:p-6"
@@ -76,8 +85,9 @@ const CommentCard = ({
         </aside>
         <button
           type="button"
-          className="absolute right-4 bottom-4 flex items-center gap-4 md:top-6 md:right-6 md:bottom-auto md:gap-6"
+          className="absolute right-4 bottom-4 flex items-center gap-2 md:top-6 md:right-6 md:bottom-auto"
           aria-label="Button for reply to the comment"
+          onClick={() => onReply(id)}
         >
           <img
             className="h-3 w-3"
@@ -92,16 +102,29 @@ const CommentCard = ({
           <div className="border-grey-100 hidden w-11 border-r-2 border-solid pl-11 md:block"></div>
           <ul className="flex w-full flex-col gap-4 pl-4 md:pl-11">
             {replies.map((reply) => (
-              <li key={reply.id}>
-                <CommentCard
-                  id={reply.id}
-                  content={reply.content}
-                  createdAt={reply.createdAt}
-                  score={reply.score}
-                  user={reply.user}
-                  replyingTo={reply.replyingTo}
-                />
-              </li>
+              <Fragment key={reply.id}>
+                <li className="first-of-type:mt-4">
+                  <CommentCard
+                    id={reply.id}
+                    content={reply.content}
+                    createdAt={reply.createdAt}
+                    score={reply.score}
+                    user={reply.user}
+                    replyingTo={reply.replyingTo}
+                    onReply={onReply}
+                    currentUser={currentUser}
+                  />
+                </li>
+                {activeReplyId === reply.id && (
+                  <li className="" key={`input-${reply.id}`}>
+                    <CommentInput
+                      replyingTo={reply.user.username}
+                      mode={'reply'}
+                      currentUser={currentUser}
+                    />
+                  </li>
+                )}
+              </Fragment>
             ))}
           </ul>
         </div>
