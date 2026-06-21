@@ -13,7 +13,7 @@ interface CommentCardProps {
   activeReplyId?: number | null
   currentUser: User
   onReply: (id: number) => void
-  onAddReply?: (content: string) => void
+  onVote: (id: number, direction: 'up' | 'down') => void
 }
 
 const CommentCard = ({
@@ -25,6 +25,7 @@ const CommentCard = ({
   replies,
   replyingTo,
   onReply,
+  onVote,
   activeReplyId,
   currentUser,
 }: CommentCardProps) => {
@@ -60,7 +61,11 @@ const CommentCard = ({
           role="group"
           aria-label="vote controls"
         >
-          <button type="button" aria-label="Upvote">
+          <button
+            onClick={() => onVote(id, 'up')}
+            type="button"
+            aria-label="Upvote"
+          >
             <img
               className="aspect-square h-2.5 w-2.5"
               src="/images/icon-plus.svg"
@@ -75,7 +80,11 @@ const CommentCard = ({
           >
             {score}
           </span>
-          <button type="button" aria-label="Downvote">
+          <button
+            onClick={() => onVote(id, 'down')}
+            type="button"
+            aria-label="Downvote"
+          >
             <img
               className="w-2.5"
               src="/images/icon-minus.svg"
@@ -113,6 +122,7 @@ const CommentCard = ({
                     replyingTo={reply.replyingTo}
                     onReply={onReply}
                     currentUser={currentUser}
+                    onVote={onVote}
                   />
                 </li>
                 {activeReplyId === reply.id && (
@@ -121,6 +131,7 @@ const CommentCard = ({
                       replyingTo={reply.user.username}
                       mode={'reply'}
                       currentUser={currentUser}
+                      onSubmit={() => {}}
                     />
                   </li>
                 )}

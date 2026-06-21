@@ -10,6 +10,24 @@ function App() {
   const [error, setError] = useState<string>('')
   const [activeReplyId, setActiveReplyId] = useState<number | null>()
 
+  const handleVote = (id: number, direction: 'up' | 'down') => {
+    const vote = direction === 'up' ? 1 : -1
+    setComments((prev) =>
+      prev.map((comment) =>
+        comment.id === id
+          ? { ...comment, score: comment.score + vote }
+          : {
+              ...comment,
+              replies: comment.replies.map((replie) =>
+                replie.id === id
+                  ? { ...replie, score: replie.score + vote }
+                  : replie
+              ),
+            }
+      )
+    )
+  }
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -44,6 +62,7 @@ function App() {
                     }
                     activeReplyId={activeReplyId}
                     currentUser={currentUser}
+                    onVote={handleVote}
                   />
                 </li>
                 {activeReplyId === comment.id && (
