@@ -60,6 +60,8 @@ function App() {
           : comment
       )
     )
+
+    setActiveReplyId(null)
   }
 
   useEffect(() => {
