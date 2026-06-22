@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Fragment } from 'react'
 import CommentInput from './CommentInput'
 import { User, Reply } from '@/types'
@@ -15,6 +16,8 @@ interface CommentCardProps {
   onReply: (id: number) => void
   onVote: (id: number, direction: 'up' | 'down') => void
   onAddReply: (id: number, userName: string, content: string) => void
+  onOpening: (id: number) => void
+  onEdit: (id: number, content: string) => void
 }
 
 const CommentCard = ({
@@ -30,7 +33,12 @@ const CommentCard = ({
   onReply,
   onVote,
   onAddReply,
+  onOpening,
+  onEdit,
 }: CommentCardProps) => {
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [editContent, setEditContent] = useState<string>(content)
+
   return (
     <div className="flex flex-col">
       <article
@@ -49,17 +57,39 @@ const CommentCard = ({
             </h2>
             <h3 className="text-preset-2-regular text-gray-500">{createdAt}</h3>
           </header>
-          <p className="text-preset-2-regular text-gray-500">
-            {replyingTo && (
-              <span className="mr-1 font-bold text-purple-600">
-                @{replyingTo}
-              </span>
-            )}
-            {content}
-          </p>
+          {isEditing ? (
+            <Fragment>
+              <textarea
+                className="border-grey-100 text-preset-2-regular text-grey-500 flex min-h-24 w-full justify-start rounded-xl border-2 border-solid px-4 py-2"
+                placeholder="Add a Comment"
+                name="comment"
+                id="comment"
+                onChange={(e) => setEditContent(e.target.value)}
+                value={editContent}
+              />
+              <button
+                onClick={() => {
+                  onEdit(id, editContent)
+                  setIsEditing(false)
+                }}
+                className="text-preset-2-medium ml-auto h-12 w-26 rounded-xl bg-purple-600 py-3 text-white"
+              >
+                UPDATE
+              </button>
+            </Fragment>
+          ) : (
+            <p className="text-preset-2-regular text-gray-500">
+              {replyingTo && (
+                <span className="mr-1 font-bold text-purple-600">
+                  @{replyingTo}
+                </span>
+              )}
+              {content}
+            </p>
+          )}
         </div>
         <aside
-          className="bg-grey-50 flex w-25 items-center justify-center gap-4 rounded-md p-2 md:w-10 md:flex-col md:py-4"
+          className="bg-grey-50 flex max-h-25 w-25 items-center justify-center gap-4 rounded-md p-2 md:w-10 md:flex-col md:py-4"
           role="group"
           aria-label="vote controls"
         >
@@ -94,19 +124,41 @@ const CommentCard = ({
             />
           </button>
         </aside>
-        <button
-          type="button"
-          className="absolute right-4 bottom-4 flex items-center gap-2 md:top-6 md:right-6 md:bottom-auto"
-          aria-label="Button for reply to the comment"
-          onClick={() => onReply(id)}
-        >
-          <img
-            className="h-3 w-3"
-            src="/images/icon-reply.svg"
-            alt="icon reply"
-          />
-          <span className="text-preset-2-medium text-purple-600">Reply</span>
-        </button>
+        {user.username === currentUser.username ? (
+          <div
+            className="md:bottom-aut absolute right-4 bottom-4 flex items-center gap-6 md:top-6 md:right-6 md:bottom-auto"
+            aria-label="Buttons"
+          >
+            <button
+              onClick={() => onOpening(id)}
+              className="flex items-center gap-2"
+            >
+              <img src="/images/icon-delete.svg" alt="icon delete" />
+              <span className="text-preset-2-medium text-pink-400">Delete</span>
+            </button>
+            <button
+              onClick={() => setIsEditing(true)}
+              className="flex items-center gap-2"
+            >
+              <img src="/images/icon-edit.svg" alt="icon edit" />
+              <span className="text-preset-2-medium text-purple-600">Edit</span>
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            className="absolute right-4 bottom-4 flex items-center gap-2 md:top-6 md:right-6 md:bottom-auto"
+            aria-label="Button for reply to the comment"
+            onClick={() => onReply(id)}
+          >
+            <img
+              className="h-3 w-3"
+              src="/images/icon-reply.svg"
+              alt="icon reply"
+            />
+            <span className="text-preset-2-medium text-purple-600">Reply</span>
+          </button>
+        )}
       </article>
       {replies && (
         <div className="flex h-full flex-row">
@@ -126,6 +178,8 @@ const CommentCard = ({
                     currentUser={currentUser}
                     onVote={onVote}
                     onAddReply={onAddReply}
+                    onOpening={onOpening}
+                    onEdit={onEdit}
                   />
                 </li>
                 {activeReplyId === reply.id && (
