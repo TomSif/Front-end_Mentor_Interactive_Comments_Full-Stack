@@ -28,6 +28,40 @@ function App() {
     )
   }
 
+  const handleAddComment = (content: string) => {
+    const newComment = {
+      id: Number(Date.now()),
+      content: content,
+      createdAt: 'Just now',
+      score: 0,
+      user: currentUser!,
+      replies: [],
+    }
+    setComments((prev) => [...prev, newComment])
+  }
+
+  const handleAddReply = (id: number, userName: string, content: string) => {
+    const newReply = {
+      id: Number(Date.now()),
+      content,
+      createdAt: 'Just now',
+      score: 0,
+      replyingTo: userName,
+      user: currentUser!,
+    }
+
+    setComments((prevComments) =>
+      prevComments.map((comment) =>
+        comment.id === id
+          ? {
+              ...comment,
+              replies: [...comment.replies, newReply],
+            }
+          : comment
+      )
+    )
+  }
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -63,6 +97,7 @@ function App() {
                     activeReplyId={activeReplyId}
                     currentUser={currentUser}
                     onVote={handleVote}
+                    onAddReply={handleAddReply}
                   />
                 </li>
                 {activeReplyId === comment.id && (
@@ -71,7 +106,13 @@ function App() {
                       mode="reply"
                       replyingTo={comment.user.username}
                       currentUser={currentUser}
-                      onSubmit={() => {}}
+                      onSubmit={(content) =>
+                        handleAddReply(
+                          comment.id,
+                          comment.user.username,
+                          content
+                        )
+                      }
                     />
                   </li>
                 )}
@@ -84,7 +125,7 @@ function App() {
         {currentUser && (
           <CommentInput
             currentUser={currentUser}
-            onSubmit={() => {}}
+            onSubmit={handleAddComment}
             mode="send"
           />
         )}

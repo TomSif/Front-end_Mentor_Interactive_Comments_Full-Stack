@@ -28,7 +28,11 @@ const CommentInput = ({
       <form
         onSubmit={(e) => {
           e.preventDefault()
-          onSubmit(content)
+          const cleanContent = replyingTo
+            ? content.replace(`@${replyingTo} `, '')
+            : content
+          if (cleanContent.trim() === '') return
+          onSubmit(cleanContent)
           setContent(replyingTo ? `@${replyingTo} ` : '')
         }}
         className="flex flex-col gap-4 md:ml-14 md:flex-row md:items-start"

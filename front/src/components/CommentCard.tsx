@@ -14,6 +14,7 @@ interface CommentCardProps {
   currentUser: User
   onReply: (id: number) => void
   onVote: (id: number, direction: 'up' | 'down') => void
+  onAddReply: (id: number, userName: string, content: string) => void
 }
 
 const CommentCard = ({
@@ -24,10 +25,11 @@ const CommentCard = ({
   user,
   replies,
   replyingTo,
-  onReply,
-  onVote,
   activeReplyId,
   currentUser,
+  onReply,
+  onVote,
+  onAddReply,
 }: CommentCardProps) => {
   return (
     <div className="flex flex-col">
@@ -123,6 +125,7 @@ const CommentCard = ({
                     onReply={onReply}
                     currentUser={currentUser}
                     onVote={onVote}
+                    onAddReply={onAddReply}
                   />
                 </li>
                 {activeReplyId === reply.id && (
@@ -131,7 +134,9 @@ const CommentCard = ({
                       replyingTo={reply.user.username}
                       mode={'reply'}
                       currentUser={currentUser}
-                      onSubmit={() => {}}
+                      onSubmit={(content) =>
+                        onAddReply(id, reply.user.username, content)
+                      }
                     />
                   </li>
                 )}
