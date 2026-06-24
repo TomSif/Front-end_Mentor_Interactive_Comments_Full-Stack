@@ -176,38 +176,40 @@ const CommentCard = ({
         <div className="flex h-full flex-row">
           <div className="border-grey-100 hidden w-11 border-r-2 border-solid pl-11 md:block"></div>
           <ul className="flex w-full flex-col gap-4 pl-4 md:pl-11">
-            {replies.map((reply) => (
-              <Fragment key={reply.id}>
-                <li className="first-of-type:mt-4">
-                  <CommentCard
-                    id={reply.id}
-                    content={reply.content}
-                    createdAt={reply.createdAt}
-                    score={reply.score}
-                    user={reply.user}
-                    replyingTo={reply.replyingTo}
-                    onReply={onReply}
-                    currentUser={currentUser}
-                    onVote={onVote}
-                    onAddReply={onAddReply}
-                    onOpening={onOpening}
-                    onEdit={onEdit}
-                  />
-                </li>
-                {activeReplyId === reply.id && (
-                  <li className="" key={`input-${reply.id}`}>
-                    <CommentInput
-                      replyingTo={reply.user.username}
-                      mode={'reply'}
+            {[...replies]
+              .sort((a, b) => b.score - a.score)
+              .map((reply) => (
+                <Fragment key={reply.id}>
+                  <li className="first-of-type:mt-4">
+                    <CommentCard
+                      id={reply.id}
+                      content={reply.content}
+                      createdAt={reply.createdAt}
+                      score={reply.score}
+                      user={reply.user}
+                      replyingTo={reply.replyingTo}
+                      onReply={onReply}
                       currentUser={currentUser}
-                      onSubmit={(content) =>
-                        onAddReply(id, reply.user.username, content)
-                      }
+                      onVote={onVote}
+                      onAddReply={onAddReply}
+                      onOpening={onOpening}
+                      onEdit={onEdit}
                     />
                   </li>
-                )}
-              </Fragment>
-            ))}
+                  {activeReplyId === reply.id && (
+                    <li className="" key={`input-${reply.id}`}>
+                      <CommentInput
+                        replyingTo={reply.user.username}
+                        mode={'reply'}
+                        currentUser={currentUser}
+                        onSubmit={(content) =>
+                          onAddReply(id, reply.user.username, content)
+                        }
+                      />
+                    </li>
+                  )}
+                </Fragment>
+              ))}
           </ul>
         </div>
       )}

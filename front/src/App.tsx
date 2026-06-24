@@ -135,50 +135,52 @@ function App() {
         <h1 className="sr-only">Interactive Comments Section</h1>
         {currentUser && (
           <ul className="flex flex-col gap-4">
-            {comments.map((comment) => {
-              return (
-                <Fragment key={comment.id}>
-                  <li>
-                    <CommentCard
-                      id={comment.id}
-                      content={comment.content}
-                      createdAt={comment.createdAt}
-                      score={comment.score}
-                      user={comment.user}
-                      replies={comment.replies}
-                      onReply={(id) =>
-                        setActiveReplyId((prev) => (prev === id ? null : id))
-                      }
-                      activeReplyId={activeReplyId}
-                      currentUser={currentUser}
-                      onVote={handleVote}
-                      onAddReply={handleAddReply}
-                      onOpening={(id) => {
-                        setIsOpen(true)
-                        setDeletingId(id)
-                      }}
-                      onEdit={handleEdit}
-                    />
-                  </li>
-                  {activeReplyId === comment.id && (
-                    <li className="w-full">
-                      <CommentInput
-                        mode="reply"
-                        replyingTo={comment.user.username}
-                        currentUser={currentUser}
-                        onSubmit={(content) =>
-                          handleAddReply(
-                            comment.id,
-                            comment.user.username,
-                            content
-                          )
+            {[...comments]
+              .sort((a, b) => b.score - a.score)
+              .map((comment) => {
+                return (
+                  <Fragment key={comment.id}>
+                    <li>
+                      <CommentCard
+                        id={comment.id}
+                        content={comment.content}
+                        createdAt={comment.createdAt}
+                        score={comment.score}
+                        user={comment.user}
+                        replies={comment.replies}
+                        onReply={(id) =>
+                          setActiveReplyId((prev) => (prev === id ? null : id))
                         }
+                        activeReplyId={activeReplyId}
+                        currentUser={currentUser}
+                        onVote={handleVote}
+                        onAddReply={handleAddReply}
+                        onOpening={(id) => {
+                          setIsOpen(true)
+                          setDeletingId(id)
+                        }}
+                        onEdit={handleEdit}
                       />
                     </li>
-                  )}
-                </Fragment>
-              )
-            })}
+                    {activeReplyId === comment.id && (
+                      <li className="w-full">
+                        <CommentInput
+                          mode="reply"
+                          replyingTo={comment.user.username}
+                          currentUser={currentUser}
+                          onSubmit={(content) =>
+                            handleAddReply(
+                              comment.id,
+                              comment.user.username,
+                              content
+                            )
+                          }
+                        />
+                      </li>
+                    )}
+                  </Fragment>
+                )
+              })}
           </ul>
         )}
         <section className="mt-4">
