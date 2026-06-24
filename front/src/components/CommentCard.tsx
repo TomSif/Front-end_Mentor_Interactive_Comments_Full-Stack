@@ -38,6 +38,7 @@ const CommentCard = ({
 }: CommentCardProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [editContent, setEditContent] = useState<string>(content)
+  const isCurrentUser = user.username === currentUser.username
 
   return (
     <div className="flex flex-col">
@@ -55,6 +56,13 @@ const CommentCard = ({
             <h2 className="text-preset-2-medium text-gray-800">
               {user.username}
             </h2>
+            {isCurrentUser ? (
+              <span className="text-preset-3 rounded-sm bg-purple-600 px-1.5 py-0.5 text-white">
+                you
+              </span>
+            ) : (
+              ''
+            )}
             <h3 className="text-preset-2-regular text-gray-500">{createdAt}</h3>
           </header>
           {isEditing ? (
@@ -94,9 +102,11 @@ const CommentCard = ({
           aria-label="vote controls"
         >
           <button
+            disabled={isCurrentUser}
             onClick={() => onVote(id, 'up')}
             type="button"
             aria-label="Upvote"
+            className="hover:cursor-pointer hover:brightness-50 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <img
               className="aspect-square h-2.5 w-2.5"
@@ -113,9 +123,11 @@ const CommentCard = ({
             {score}
           </span>
           <button
+            disabled={isCurrentUser}
             onClick={() => onVote(id, 'down')}
             type="button"
             aria-label="Downvote"
+            className="hover:cursor-pointer hover:brightness-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <img
               className="w-2.5"
@@ -124,7 +136,7 @@ const CommentCard = ({
             />
           </button>
         </aside>
-        {user.username === currentUser.username ? (
+        {isCurrentUser ? (
           <div
             className="md:bottom-aut absolute right-4 bottom-4 flex items-center gap-6 md:top-6 md:right-6 md:bottom-auto"
             aria-label="Buttons"
