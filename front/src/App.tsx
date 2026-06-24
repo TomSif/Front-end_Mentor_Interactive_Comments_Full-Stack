@@ -10,8 +10,9 @@ function App() {
   const [error, setError] = useState<string>('')
   const [activeReplyId, setActiveReplyId] = useState<number | null>()
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const dialogRef = useRef<HTMLDialogElement>(null)
   const [deletingId, setDeletingId] = useState<number | null>(null)
+  const dialogRef = useRef<HTMLDialogElement>(null)
+  const isInitialized = useRef<boolean>(false)
 
   const handleVote = (id: number, direction: 'up' | 'down') => {
     const vote = direction === 'up' ? 1 : -1
@@ -97,14 +98,25 @@ function App() {
     const loadData = async () => {
       try {
         const data = await getCommentsData()
+        const savedComments = localStorage.getItem('comments')
+        if (savedComments !== null) {
+          setComments(JSON.parse(savedComments))
+        } else {
+          setComments(data.comments)
+        }
         setCurrentUser(data.currentUser)
-        setComments(data.comments)
+        isInitialized.current = true
       } catch (err) {
         if (err instanceof Error) setError(err.message)
       }
     }
     loadData()
   }, [])
+
+  useEffect(() => {
+    if (!isInitialized.current) return
+    localStorage.setItem('comments', JSON.stringify(comments))
+  }, [comments])
 
   useEffect(() => {
     const dialog = dialogRef.current
