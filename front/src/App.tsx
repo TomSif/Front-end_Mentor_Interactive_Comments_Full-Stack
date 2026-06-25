@@ -1,5 +1,12 @@
 import { useState, useEffect, Fragment, useRef } from 'react'
 import { User, Comment } from '@/types'
+import {
+  applyDelete,
+  applyEdit,
+  applyVote,
+  buildComment,
+  buildReply,
+} from './utils/comments'
 import getCommentsData from '@/services/comments'
 import CommentCard from './components/CommentCard'
 import CommentInput from './components/CommentInput'
@@ -15,51 +22,23 @@ function App() {
   const isInitialized = useRef<boolean>(false)
 
   const handleVote = (id: number, direction: 'up' | 'down') => {
-    const vote = direction === 'up' ? 1 : -1
-    setComments((prev) =>
-      prev.map((comment) =>
-        comment.id === id
-          ? { ...comment, score: comment.score + vote }
-          : {
-              ...comment,
-              replies: comment.replies.map((replie) =>
-                replie.id === id
-                  ? { ...replie, score: replie.score + vote }
-                  : replie
-              ),
-            }
-      )
-    )
+    setComments((prev) => applyVote(prev, id, direction))
   }
 
   const handleAddComment = (content: string) => {
-    const newComment = {
-      id: Number(Date.now()),
-      content: content,
-      createdAt: 'Just now',
-      score: 0,
-      user: currentUser!,
-      replies: [],
-    }
-    setComments((prev) => [...prev, newComment])
+    setComments((prev) => [...prev, buildComment(content, currentUser!)])
   }
 
   const handleAddReply = (id: number, userName: string, content: string) => {
-    const newReply = {
-      id: Number(Date.now()),
-      content,
-      createdAt: 'Just now',
-      score: 0,
-      replyingTo: userName,
-      user: currentUser!,
-    }
-
     setComments((prevComments) =>
       prevComments.map((comment) =>
         comment.id === id
           ? {
               ...comment,
-              replies: [...comment.replies, newReply],
+              replies: [
+                ...comment.replies,
+                buildReply(userName, content, currentUser!),
+              ],
             }
           : comment
       )
@@ -69,29 +48,11 @@ function App() {
   }
 
   const handleEdit = (id: number, newContent: string) => {
-    setComments((prev) =>
-      prev.map((comment) =>
-        comment.id === id
-          ? { ...comment, content: newContent }
-          : {
-              ...comment,
-              replies: comment.replies.map((reply) =>
-                reply.id === id ? { ...reply, content: newContent } : reply
-              ),
-            }
-      )
-    )
+    setComments((prev) => applyEdit(prev, id, newContent))
   }
 
   const handleDelete = (deletingId: number) => {
-    setComments((prev) =>
-      prev
-        .filter((comment) => comment.id !== deletingId)
-        .map((comment) => ({
-          ...comment,
-          replies: comment.replies.filter((reply) => reply.id !== deletingId),
-        }))
-    )
+    setComments((prev) => applyDelete(prev, deletingId))
   }
 
   useEffect(() => {
