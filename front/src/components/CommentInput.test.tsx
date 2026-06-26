@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi, beforeEach } from 'vitest'
 import userEvent from '@testing-library/user-event'
 import CommentInput from './CommentInput'
 
@@ -13,6 +13,9 @@ const currentUser = {
 const handleSubmit = vi.fn()
 
 describe('Comment Input', () => {
+  beforeEach(() => {
+    handleSubmit.mockClear()
+  })
   it('renders the send button', () => {
     render(
       <CommentInput
