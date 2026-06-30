@@ -57,7 +57,10 @@ const CommentCard = ({
               {user.username}
             </h2>
             {isCurrentUser ? (
-              <span className="text-preset-3 rounded-sm bg-purple-600 px-1.5 py-0.5 text-white">
+              <span
+                data-testid="you-badge"
+                className="text-preset-3 rounded-sm bg-purple-600 px-1.5 py-0.5 text-white"
+              >
                 you
               </span>
             ) : (
@@ -111,7 +114,7 @@ const CommentCard = ({
             <img
               className="aspect-square h-2.5 w-2.5"
               src="/images/icon-plus.svg"
-              alt="button plus"
+              alt=""
             />
           </button>
           <span
@@ -129,11 +132,7 @@ const CommentCard = ({
             aria-label="Downvote"
             className="hover:cursor-pointer hover:brightness-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <img
-              className="w-2.5"
-              src="/images/icon-minus.svg"
-              alt="button minus"
-            />
+            <img className="w-2.5" src="/images/icon-minus.svg" alt="" />
           </button>
         </aside>
         {isCurrentUser ? (
@@ -145,14 +144,14 @@ const CommentCard = ({
               onClick={() => onOpening(id)}
               className="flex items-center gap-2"
             >
-              <img src="/images/icon-delete.svg" alt="icon delete" />
+              <img src="/images/icon-delete.svg" alt="" />
               <span className="text-preset-2-medium text-pink-400">Delete</span>
             </button>
             <button
               onClick={() => setIsEditing(true)}
               className="flex items-center gap-2"
             >
-              <img src="/images/icon-edit.svg" alt="icon edit" />
+              <img src="/images/icon-edit.svg" alt="" />
               <span className="text-preset-2-medium text-purple-600">Edit</span>
             </button>
           </div>
@@ -160,14 +159,9 @@ const CommentCard = ({
           <button
             type="button"
             className="absolute right-4 bottom-4 flex items-center gap-2 md:top-6 md:right-6 md:bottom-auto"
-            aria-label="Button for reply to the comment"
             onClick={() => onReply(id)}
           >
-            <img
-              className="h-3 w-3"
-              src="/images/icon-reply.svg"
-              alt="icon reply"
-            />
+            <img className="h-3 w-3" src="/images/icon-reply.svg" alt="" />
             <span className="text-preset-2-medium text-purple-600">Reply</span>
           </button>
         )}
