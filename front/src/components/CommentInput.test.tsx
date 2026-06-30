@@ -64,7 +64,7 @@ describe('Comment Input', () => {
 
     expect(screen.getByRole('textbox')).toHaveValue('')
   })
-  it('does not call onSubmit if text area is empy', async () => {
+  it('does not call onSubmit if text area is empty', async () => {
     render(
       <CommentInput
         currentUser={currentUser}
