@@ -46,7 +46,7 @@ describe('Comment Card', () => {
   })
   it('renders the delete button when user is currentUser', () => {
     render(<CommentCard {...baseProps} user={currentUser} />)
-    expect(screen.getByRole('button', { name: 'Delete' }))
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument()
   })
   it('does not render the delete button when user is not currentUser', () => {
     render(<CommentCard {...baseProps} user={otherUser} />)
@@ -56,7 +56,7 @@ describe('Comment Card', () => {
   })
   it('renders the Edit button when user is currentUser', () => {
     render(<CommentCard {...baseProps} user={currentUser} />)
-    expect(screen.getByRole('button', { name: 'Edit' }))
+    expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument()
   })
   it('does not render the Edit button when user is not currentUser', () => {
     render(<CommentCard {...baseProps} user={otherUser} />)
@@ -64,7 +64,7 @@ describe('Comment Card', () => {
   })
   it('renders the Reply button when user is not currentUser', () => {
     render(<CommentCard {...baseProps} user={otherUser} />)
-    expect(screen.getByRole('button', { name: 'Reply' }))
+    expect(screen.getByRole('button', { name: 'Reply' })).toBeInTheDocument()
   })
   it('does not render the Reply button when user is currentUser', () => {
     render(<CommentCard {...baseProps} user={currentUser} />)
