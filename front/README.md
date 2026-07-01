@@ -1,119 +1,190 @@
-# Frontend Mentor - Interactive comments section
+# Frontend Mentor - Interactive Comments Section 💬
 
-![Design preview for the Interactive comments section coding challenge](preview.jpg)
+[![React](https://img.shields.io/badge/react_19-20232a?style=for-the-badge&logo=react&logoColor=61dafb)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/vite-646cff?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind](https://img.shields.io/badge/tailwindcss_v4-0F172A?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Vitest](https://img.shields.io/badge/vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white)](https://vitest.dev/)
+[![Testing Library](https://img.shields.io/badge/testing_library-E33332?style=for-the-badge&logo=testing-library&logoColor=white)](https://testing-library.com/)
+[![Prettier](https://img.shields.io/badge/prettier-1A2B34?style=for-the-badge&logo=prettier&logoColor=F7B93E)](https://prettier.io/)
 
-## Welcome! 👋
+<img src="./public/images/screenshot-desktop.png" alt="Design preview for the Interactive comments section challenge" width="800" />
 
-Thanks for checking out this front-end coding challenge.
+### 🌐 Live Demo:
 
-[Frontend Mentor](https://www.frontendmentor.io) challenges help you improve your coding skills by building realistic projects.
+**[View live site →](https://front-end-mentor-interactive-commen-psi.vercel.app/)**
 
-**To do this challenge, you need a strong understanding of HTML, CSS and JavaScript.**
+Deployed on Vercel with HTTPS and performance optimizations.
 
-## The challenge
+---
 
-Your challenge is to build out this interactive comments section and get it looking as close to the design as possible.
+This is a solution to the [Interactive comments section challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/interactive-comments-section-iG1RugEG9). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
-You can use any tools you like to help you complete the challenge. So if you've got something you'd like to practice, feel free to give it a go.
+## Table of contents
 
-We provide the data in a local `data.json` file, so use that to populate the content on the first load. If you want to take it up a notch, feel free to build this as a full-stack CRUD application!
+- [Overview](#overview)
+  - [The challenge](#the-challenge)
+  - [Screenshot](#screenshot)
+  - [Links](#links)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [What I learned](#what-i-learned)
+  - [Continued development](#continued-development)
+- [Author](#author)
+- [Acknowledgments](#acknowledgments)
 
-Your users should be able to:
+## Overview
+
+### The challenge
+
+Users should be able to:
 
 - View the optimal layout for the app depending on their device's screen size
 - See hover states for all interactive elements on the page
 - Create, Read, Update, and Delete comments and replies
 - Upvote and downvote comments
-- **Bonus**: If you're building a purely front-end project, use `localStorage` to save the current state in the browser that persists when the browser is refreshed.
-- **Bonus**: Instead of using the `createdAt` strings from the `data.json` file, try using timestamps and dynamically track the time since the comment or reply was posted.
 
-### Want some support on the challenge? 
+### Screenshot
 
-[Join our community](https://www.frontendmentor.io/community) and ask questions in the **#help** channel.
+<table>
+  <tr>
+    <td><img src="./public/images/screenshot-desktop.png" alt="Desktop layout" width="400" /></td>
+    <td><img src="./public/images/screenshot-desktop-active.png" alt="Active states — edit mode and reply input" width="400" /></td>
+  </tr>
+  <tr>
+    <td><img src="./public/images/screenshot-mobile.png" alt="Mobile layout" width="250" /></td>
+    <td><img src="./public/images/screenshot-delete-modal.png" alt="Delete confirmation modal" width="600" /></td>
+  </tr>
+</table>
 
-### Expected behaviour
+### Links
 
-- First-level comments should be ordered by their score, whereas nested replies are ordered by time added.
-- Replying to a comment adds the new reply to the bottom of the nested replies within that comment.
-- A confirmation modal should pop up before a comment or reply is deleted.
-- Adding a new comment or reply uses the `currentUser` object from within the `data.json` file.
-- You can only edit or delete your own comments and replies.
+- Solution URL: [Frontend Mentor Solution](#)
+- Live Site URL: [Vercel Deployment](https://front-end-mentor-interactive-commen-psi.vercel.app/)
+- GitHub Repository: [Front-end_Mentor_Interactive_Comments_Full-Stack](https://github.com/TomSif/Front-end_Mentor_Interactive_Comments_Full-Stack/tree/main/front)
 
-## Where to find everything
+## My process
 
-Your task is to build out the project to the designs inside the `/design` folder. You will find both a mobile and a desktop version of the design.
+### Built with
 
-The designs are in JPG static format. Using JPGs will mean that you'll need to use your best judgment for styles such as `font-size`, `padding` and `margin`.
+- Semantic HTML5 markup, including a native `<dialog>` element for the delete-confirmation modal
+- Mobile-first workflow, driven by the provided mobile/desktop mockups
+- [React 19](https://react.dev/) - JS library
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/) - Build tool (`react-ts` template)
+- [Tailwind CSS v4](https://tailwindcss.com/) - Utility-first CSS via the native `@tailwindcss/vite` plugin, with design tokens and text presets extracted from the Figma captures into `@theme` and `@utility`
+- [Vitest](https://vitest.dev/) - Unit and component test runner (`jsdom` environment, `globals: true`)
+- [React Testing Library](https://testing-library.com/) + `@testing-library/jest-dom` + `user-event` - Behaviour-first component testing (24 tests covering pure utility functions and component interactions)
+- [Prettier](https://prettier.io/) + `prettier-plugin-tailwindcss` - Formatting and automatic class ordering
 
-If you would like the Figma design file to inspect the design in more detail, you can [subscribe as a PRO member](https://www.frontendmentor.io/pro).
+### What I learned
 
-You will find all the required assets in the `/images` folder. The assets are already optimized.
+#### A recursive component for comments and replies
 
-There is also a `style-guide.md` file containing the information you'll need, such as color palette and fonts.
+The biggest architectural decision was to use a **single `CommentCard` component** for both top-level comments and nested replies, calling itself recursively rather than duplicating markup for each level. I was skeptical this could work without spiraling out of control, but after seeing the pattern explained once, writing it myself made the logic click.
 
-## Using AI coding assistants
+```tsx
+// CommentCard.tsx — simplified shape of the recursion
+function CommentCard({
+  comment,
+  currentUser,
+  onVote,
+  onReply,
+  onEdit,
+  onDelete,
+}: CommentCardProps) {
+  return (
+    <li>
+      {/* ...comment content, votes, actions... */}
+      {comment.replies?.map((reply) => (
+        <CommentCard
+          key={reply.id}
+          comment={reply}
+          currentUser={currentUser}
+          {...handlers}
+        />
+      ))}
+    </li>
+  )
+}
+```
 
-We've included two files to help you if you're using AI coding assistants (like Claude, GitHub Copilot, Cursor, etc.) while working on this challenge:
+The part that made it click, and that I noted myself at the end of that session: data that only concerns the recursion — like `replyingTo`, used to show the `@username` prefix on a reply — never needs to travel back up to `App`. It can stay entirely local to the component calling itself.
 
-- `AGENTS.md` - Contains detailed instructions for AI assistants on how to help you with this challenge. It's tailored to this challenge's difficulty level, so the AI will provide guidance appropriate to your learning stage—offering more support for beginner challenges and encouraging more independence on advanced ones.
-- `CLAUDE.md` - A pointer file that directs Claude-based tools to the AGENTS.md instructions.
+#### Immutable updates on two levels of nested state
 
-**How to use them:** You don't need to do anything! These files are automatically detected by most AI coding tools. The AI will read them and adjust its behavior to be a better learning partner—guiding you toward solutions rather than just giving you the answers.
+`comments[].replies[]` is a nested structure, so every mutation (vote, edit, delete) has to update the right item **without mutating the array or its objects** — and, unlike a flat list, the target item can live at two different depths. This was flagged from the very start as the riskiest part of the project, and it turned out to be exactly that:
 
-**Note:** These files are designed to help you *learn*, not to do the work for you. The AI is instructed to ask questions, give hints, and explain concepts rather than writing complete solutions.
+```ts
+// utils/comments.ts — vote logic reaching into a nested reply
+export function applyVote(
+  comments: Comment[],
+  id: number,
+  direction: 'up' | 'down'
+): Comment[] {
+  return comments.map((comment) => {
+    if (comment.id === id)
+      return {
+        ...comment,
+        score: comment.score + (direction === 'up' ? 1 : -1),
+      }
+    return {
+      ...comment,
+      replies: comment.replies.map((reply) =>
+        reply.id === id
+          ? { ...reply, score: reply.score + (direction === 'up' ? 1 : -1) }
+          : reply
+      ),
+    }
+  })
+}
+```
 
-## Building your project
+Once the two-spread pattern was understood, I was able to write the edit and delete logic on my own by mirroring the same structure — a good sign the concept had actually landed rather than just being copy-pasted once.
 
-Feel free to use any workflow that you feel comfortable with. Below is a suggested process, but do not feel like you need to follow these steps:
+#### `useRef` as a "don't run yet" flag, not a state trigger
 
-1. Initialize your project as a public repository on [GitHub](https://github.com/). Creating a repo will make it easier to share your code with the community if you need help. If you're not sure how to do this, [have a read-through of this Try Git resource](https://try.github.io/).
-2. Configure your repository to publish your code to a web address. This will also be useful if you need some help during a challenge as you can share the URL for your project with your repo URL. There are a number of ways to do this, and we provide some recommendations below.
-3. Look through the designs to start planning out how you'll tackle the project. This step is crucial to help you think ahead for CSS classes to create reusable styles.
-4. Before adding any styles, structure your content with HTML. Writing your HTML first can help focus your attention on creating well-structured content.
-5. Write out the base styles for your project, including general content styles, such as `font-family` and `font-size`.
-6. Start adding styles to the top of the page and work down. Only move on to the next section once you're happy you've completed the area you're working on.
+`localStorage` persistence introduced a subtle bug: the save effect fired **before** the initial fetch had finished, silently overwriting saved data with an empty array. The fix was a `useRef<boolean>` flag to distinguish the first render from subsequent ones — without triggering an extra re-render the way a `useState` would have:
 
-## Deploying your project
+```ts
+const isInitialized = useRef(false)
 
-As mentioned above, there are many ways to host your project for free. Our recommended hosts are:
+useEffect(() => {
+  if (!isInitialized.current) {
+    isInitialized.current = true
+    return // skip the save on first render
+  }
+  localStorage.setItem('comments', JSON.stringify(comments))
+}, [comments])
+```
 
-- [GitHub Pages](https://pages.github.com/)
-- [Vercel](https://vercel.com/)
-- [Netlify](https://www.netlify.com/)
+This was the moment the difference between `useState` (re-renders) and `useRef` (persists silently across renders) stopped being an abstract rule and became a tool I reach for deliberately.
 
-You can host your site using one of these solutions or any of our other trusted providers. [Read more about our recommended and trusted hosts](https://www.frontendmentor.io/guides/hosting-your-solution).
+#### Tests as a first-class deliverable, and the gotchas they surfaced
 
-## Create a custom `README.md`
+With 24 Vitest + RTL tests covering both pure utility functions and `CommentCard` interactions, testing was where several accessibility and sequencing assumptions got corrected:
 
-We strongly recommend overwriting this `README.md` with a custom one. We've provided a template inside the [`README-template.md`](./README-template.md) file in this starter code.
+- **`alt` text on decorative icons counts toward a button's accessible name.** An icon with `alt="icon delete"` next to a "Delete" label produced the accessible name "icon delete Delete" — not what `getByRole('button', { name: 'Delete' })` expected. Fixed with `alt=""` on purely decorative icons.
+- **`aria-label` silently overrides visible text.** A `Reply` button had a redundant `aria-label` that hid the word "Reply" from accessible-name queries entirely.
+- **Scenario order matters in multi-step interaction tests.** The edit-mode textarea doesn't exist in the DOM until _after_ the Edit button is clicked — querying for it beforehand simply fails, which anchored the render → trigger → query → act → assert sequence for good.
 
-The template provides a guide for what to add. A custom `README` will help you explain your project and reflect on your learnings. Please feel free to edit our template as much as you like.
+### Continued development
 
-Once you've added your information to the template, delete this file and rename the `README-template.md` file to `README.md`. That will make it show up as your repository's README file.
+- **Deep prop chains** — tracing props through `App → CommentCard → recursive → CommentInput` is manageable piece by piece, but following the full chain in one pass is still effortful past two or three levels. Making this instinctive is the next target.
+- **Closures vs. arguments in JSX callbacks** — a bug where a delete handler kept capturing the root comment's `id` instead of the nested reply's `id` was invisible until I understood _why_ a closure over `comment.id` behaves differently from passing the id as an argument. Worth deliberately checking for on every callback passed down through recursion.
+- **Dynamic relative timestamps** — the bonus of replacing the static `createdAt` strings with a live "X minutes ago" display (via `Intl.RelativeTimeFormat` or a manual calculation) wasn't tackled in this pass and is a natural next addition.
 
-## Submitting your solution
+## Author
 
-Submit your solution on the platform for the rest of the community to see. Follow our ["Complete guide to submitting solutions"](https://www.frontendmentor.io/guides/how-to-submit-solutions) for tips on how to do this.
+- Frontend Mentor - [@TomSif](https://www.frontendmentor.io/profile/TomSif)
+- GitHub - [@TomSif](https://github.com/TomSif)
 
-Remember, if you're looking for feedback on your solution, be sure to ask questions when submitting it. The more specific and detailed you are with your questions, the higher the chance you'll get valuable feedback from the community.
+## Acknowledgments
 
-## Sharing your solution
+This project was built with AI-assisted mentoring (Claude). The approach: I code by hand, Claude acts as a Socratic mentor — asking questions, explaining concepts, reviewing my reasoning. The architectural decisions stayed mine to make.
 
-There are multiple places you can share your solution:
+Specific AI contributions are documented transparently in my [progression log](./progression.md):
 
-1. Share your solution page in the **#finished-projects** channel of the [community](https://www.frontendmentor.io/community).
-2. Share on [X (formerly Twitter)](https://x.com/frontendmentor) and mention **@frontendmentor**, including the repo and live URLs in your post. We'd love to take a look at what you've built and help share it around.
-3. Share your solution on [LinkedIn](https://www.linkedin.com/company/frontend-mentor/).
-4. Blog about your experience building your project. Writing about your workflow, technical choices, and talking through your code is a brilliant way to reinforce what you've learned. Great platforms to write on are [dev.to](https://dev.to/), [Hashnode](https://hashnode.com/), and [CodeNewbie](https://community.codenewbie.org/).
-
-We provide templates to help you share your solution once you've submitted it on the platform. Please do edit them and include specific questions when you're looking for feedback.
-
-The more specific you are with your questions the more likely it is that another member of the community will give you feedback.
-
-## Got feedback for us?
-
-We love receiving feedback! We're always looking to improve our challenges and our platform. So if you have anything you'd like to mention, please email hi[at]frontendmentor[dot]io.
-
-This challenge is completely free. Please share it with anyone who will find it useful for practice.
-
-**Have fun building!** 🚀
+- **Written by Claude:** direct, fully commented explanations on genuinely new ground — the recursive-component pattern, the two-level immutable update on nested state, the `useRef`-as-flag pattern for guarding an effect on first render, and the RTL/`userEvent` async testing cycle
+- **My initiative:** recognizing that recursion-local data (`replyingTo`) never needs to be lifted to `App`; choosing `disabled` + Tailwind's `disabled:` variants for restricting votes on my own comments; extracting pure functions out of `App.tsx` handlers into `utils/comments.ts` after a single explanation of the pattern; reasoning through the `utils/` vs `services/` distinction on my own
+- **Collaborative:** diagnosing the closure-vs-argument bug on the delete/reply handlers; working through the accessible-name conflicts between `alt` text and `aria-label` that surfaced through testing; and pinning down the render-order bug behind the `localStorage` "saved too early" issue
