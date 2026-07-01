@@ -49,7 +49,7 @@ const CommentCard = ({
         <div className="flex w-full flex-col gap-4">
           <header className="flex items-center gap-4">
             <img
-              className="h8 aspect-square w-8 rounded-full"
+              className="aspect-square h-8 w-8 rounded-full"
               src={user.image.png}
               alt={`image of ${user.username}`}
             />
