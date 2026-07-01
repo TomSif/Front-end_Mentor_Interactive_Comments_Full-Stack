@@ -141,6 +141,7 @@ const CommentCard = ({
             aria-label="Buttons"
           >
             <button
+              type="button"
               onClick={() => onOpening(id)}
               className="flex items-center gap-2"
             >
@@ -148,6 +149,7 @@ const CommentCard = ({
               <span className="text-preset-2-medium text-pink-400">Delete</span>
             </button>
             <button
+              type="button"
               onClick={() => setIsEditing(true)}
               className="flex items-center gap-2"
             >

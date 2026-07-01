@@ -85,4 +85,58 @@ describe('Comment Card', () => {
     )
     expect(screen.getByText('@ramsesmiron')).toBeInTheDocument()
   })
+  it('calls onVote with "up" when Upvote is clicked', async () => {
+    // Arrange
+    render(
+      <CommentCard {...baseProps} user={otherUser} replyingTo="ramsesmiron" />
+    )
+    const user = userEvent.setup()
+    const upVoteButton = screen.getByRole('button', { name: 'Upvote' })
+    // Act
+    await user.click(upVoteButton)
+    // Assert
+    expect(baseProps.onVote).toHaveBeenCalledWith(1, 'up')
+  })
+  it('calls onVote with "down" when Upvote is clicked', async () => {
+    // Arrange
+    render(
+      <CommentCard {...baseProps} user={otherUser} replyingTo="ramsesmiron" />
+    )
+    const user = userEvent.setup()
+    const upVoteButton = screen.getByRole('button', { name: 'Downvote' })
+    // Act
+    await user.click(upVoteButton)
+    // Assert
+    expect(baseProps.onVote).toHaveBeenCalledWith(1, 'down')
+  })
+  it('calls onOpening when Delete is clicked', async () => {
+    // Arrange
+    render(
+      <CommentCard {...baseProps} user={currentUser} replyingTo="ramsesmiron" />
+    )
+    const user = userEvent.setup()
+    const deleteButton = screen.getByRole('button', { name: 'Delete' })
+    // Act
+    await user.click(deleteButton)
+    // Assert
+    expect(baseProps.onOpening).toHaveBeenCalledWith(1)
+  })
+  it('calls onEdit when Edit is clicked', async () => {
+    // Arrange
+    render(
+      <CommentCard {...baseProps} user={currentUser} replyingTo="ramsesmiron" />
+    )
+    const user = userEvent.setup()
+    const editButton = screen.getByRole('button', { name: 'Edit' })
+    // Act
+    await user.click(editButton)
+    // Assert
+    const textArea = screen.getByRole('textbox')
+    // Act
+    await user.clear(textArea)
+    await user.type(textArea, 'nouveau texte')
+    await user.click(screen.getByRole('button', { name: 'UPDATE' }))
+    // Assert
+    expect(baseProps.onEdit).toHaveBeenCalledWith(1, 'nouveau texte')
+  })
 })
