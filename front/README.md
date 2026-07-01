@@ -59,7 +59,6 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [Frontend Mentor Solution](#)
 - Live Site URL: [Vercel Deployment](https://front-end-mentor-interactive-commen-psi.vercel.app/)
 - GitHub Repository: [Front-end_Mentor_Interactive_Comments_Full-Stack](https://github.com/TomSif/Front-end_Mentor_Interactive_Comments_Full-Stack/tree/main/front)
 
