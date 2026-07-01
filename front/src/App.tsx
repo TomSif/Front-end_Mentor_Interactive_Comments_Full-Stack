@@ -94,6 +94,7 @@ function App() {
     <Fragment>
       <main className="bg-grey-50 relative min-h-screen w-full px-4 py-8 md:px-10.5 md:py-14.5">
         <h1 className="sr-only">Interactive Comments Section</h1>
+        {error && <p>{error}</p>}
         {currentUser && (
           <ul className="flex flex-col gap-4">
             {[...comments]
