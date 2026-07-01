@@ -15,7 +15,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState<User>()
   const [comments, setComments] = useState<Comment[]>([])
   const [error, setError] = useState<string>('')
-  const [activeReplyId, setActiveReplyId] = useState<number | null>()
+  const [activeReplyId, setActiveReplyId] = useState<number | null>(null)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const dialogRef = useRef<HTMLDialogElement>(null)
