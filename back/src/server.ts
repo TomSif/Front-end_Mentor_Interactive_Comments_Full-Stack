@@ -3,6 +3,7 @@ import db from "./db.js";
 import cors from "cors";
 
 const app = express();
+app.use(express.json());
 
 const currentUser = {
   username: "juliusomo",
@@ -57,6 +58,37 @@ app.get("/comments", (req, res) => {
     }));
 
   res.json({ currentUser, comments });
+});
+
+app.post("/comments", (req, res) => {
+  const { content } = req.body;
+
+  const insert = db.prepare(`
+    INSERT INTO comments (content, created_at, score, username, image_png, image_webp, parent_id, replying_to)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `);
+
+  const result = insert.run(
+    content,
+    "Just now",
+    0,
+    currentUser.username,
+    currentUser.image.png,
+    currentUser.image.webp,
+    null,
+    null,
+  );
+
+  const newComment = {
+    id: Number(result.lastInsertRowid),
+    content,
+    createdAt: "Just now",
+    score: 0,
+    user: currentUser,
+    replies: [],
+  };
+
+  res.json(newComment);
 });
 
 app.listen(3000, () => {
