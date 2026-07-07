@@ -1,6 +1,7 @@
 import express from "express";
 import db from "./db.js";
 import cors from "cors";
+import { seedIfEmpty } from "./seed.js";
 
 const app = express();
 app.use(express.json());
@@ -137,6 +138,8 @@ app.patch("/comments/:id/vote", (req, res) => {
 
   res.json(updated);
 });
+
+seedIfEmpty();
 
 app.listen(3000, () => {
   console.log("epxress server is running");
