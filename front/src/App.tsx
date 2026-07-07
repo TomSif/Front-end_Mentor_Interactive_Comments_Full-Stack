@@ -1,13 +1,11 @@
 import { useState, useEffect, Fragment, useRef } from 'react'
 import { User, Comment } from '@/types'
-import {
-  applyDelete,
-  applyEdit,
-  applyVote,
-  buildComment,
-  buildReply,
-} from './utils/comments'
-import getCommentsData from '@/services/comments'
+import { applyDelete, applyEdit, applyVote } from './utils/comments'
+import getCommentsData, {
+  postComment,
+  postReply,
+  patchVote,
+} from '@/services/comments'
 import CommentCard from './components/CommentCard'
 import CommentInput from './components/CommentInput'
 
@@ -19,32 +17,41 @@ function App() {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const dialogRef = useRef<HTMLDialogElement>(null)
-  const isInitialized = useRef<boolean>(false)
 
   const handleVote = (id: number, direction: 'up' | 'down') => {
     setComments((prev) => applyVote(prev, id, direction))
+    patchVote(id, direction).catch((err) => {
+      if (err instanceof Error) setError(err.message)
+    })
   }
 
-  const handleAddComment = (content: string) => {
-    setComments((prev) => [...prev, buildComment(content, currentUser!)])
+  const handleAddComment = async (content: string) => {
+    try {
+      const newComment = await postComment(content)
+      setComments((prev) => [...prev, newComment])
+    } catch (err) {
+      if (err instanceof Error) setError(err.message)
+    }
   }
 
-  const handleAddReply = (id: number, userName: string, content: string) => {
-    setComments((prevComments) =>
-      prevComments.map((comment) =>
-        comment.id === id
-          ? {
-              ...comment,
-              replies: [
-                ...comment.replies,
-                buildReply(userName, content, currentUser!),
-              ],
-            }
-          : comment
+  const handleAddReply = async (
+    id: number,
+    userName: string,
+    content: string
+  ) => {
+    try {
+      const newReply = await postReply(id, content, userName)
+      setComments((prevComments) =>
+        prevComments.map((comment) =>
+          comment.id === id
+            ? { ...comment, replies: [...comment.replies, newReply] }
+            : comment
+        )
       )
-    )
-
-    setActiveReplyId(null)
+      setActiveReplyId(null)
+    } catch (err) {
+      if (err instanceof Error) setError(err.message)
+    }
   }
 
   const handleEdit = (id: number, newContent: string) => {
@@ -59,25 +66,14 @@ function App() {
     const loadData = async () => {
       try {
         const data = await getCommentsData()
-        const savedComments = localStorage.getItem('comments')
-        if (savedComments !== null) {
-          setComments(JSON.parse(savedComments))
-        } else {
-          setComments(data.comments)
-        }
+        setComments(data.comments)
         setCurrentUser(data.currentUser)
-        isInitialized.current = true
       } catch (err) {
         if (err instanceof Error) setError(err.message)
       }
     }
     loadData()
   }, [])
-
-  useEffect(() => {
-    if (!isInitialized.current) return
-    localStorage.setItem('comments', JSON.stringify(comments))
-  }, [comments])
 
   useEffect(() => {
     const dialog = dialogRef.current
