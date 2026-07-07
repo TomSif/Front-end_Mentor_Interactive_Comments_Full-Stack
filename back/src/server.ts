@@ -123,6 +123,21 @@ app.post("/comments/:id/replies", (req, res) => {
   res.json(newReply);
 });
 
+app.patch("/comments/:id/vote", (req, res) => {
+  const id = Number(req.params.id);
+  const { direction } = req.body;
+  const delta = direction === "up" ? 1 : -1;
+
+  db.prepare("UPDATE comments SET score = score + ? WHERE id = ?").run(
+    delta,
+    id,
+  );
+
+  const updated = db.prepare("SELECT score FROM comments WHERE id = ?").get(id);
+
+  res.json(updated);
+});
+
 app.listen(3000, () => {
   console.log("epxress server is running");
 });
