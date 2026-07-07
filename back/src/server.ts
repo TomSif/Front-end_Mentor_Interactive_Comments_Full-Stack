@@ -91,6 +91,38 @@ app.post("/comments", (req, res) => {
   res.json(newComment);
 });
 
+app.post("/comments/:id/replies", (req, res) => {
+  const parentId = Number(req.params.id);
+  const { content, replyingTo } = req.body;
+
+  const insert = db.prepare(`
+    INSERT INTO comments (content, created_at, score, username, image_png, image_webp, parent_id, replying_to)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `);
+
+  const result = insert.run(
+    content,
+    "Just now",
+    0,
+    currentUser.username,
+    currentUser.image.png,
+    currentUser.image.webp,
+    parentId,
+    replyingTo,
+  );
+
+  const newReply = {
+    id: Number(result.lastInsertRowid),
+    content,
+    createdAt: "Just now",
+    score: 0,
+    replyingTo,
+    user: currentUser,
+  };
+
+  res.json(newReply);
+});
+
 app.listen(3000, () => {
   console.log("epxress server is running");
 });
