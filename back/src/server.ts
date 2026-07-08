@@ -139,6 +139,38 @@ app.patch("/comments/:id/vote", (req, res) => {
   res.json(updated);
 });
 
+app.put("/comments/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const { content } = req.body;
+
+  const item = db.prepare("SELECT username FROM comments WHERE id = ?").get(id);
+
+  if (!item || item.username !== currentUser.username) {
+    return res.status(403).json({ error: "Not allowed" });
+  }
+
+  db.prepare("UPDATE comments SET content = ? WHERE id = ?").run(content, id);
+
+  const updated = db.prepare("SELECT * FROM comments WHERE id = ?").get(id);
+
+  res.json(updated);
+});
+
+app.delete("/comments/:id", (req, res) => {
+  const id = Number(req.params.id);
+
+  const item = db.prepare("SELECT username FROM comments WHERE id = ?").get(id);
+
+  if (!item || item.username !== currentUser.username) {
+    return res.status(403).json({ error: "Not allowed" });
+  }
+
+  db.prepare("DELETE FROM comments WHERE parent_id = ?").run(id);
+  db.prepare("DELETE FROM comments WHERE id = ?").run(id);
+
+  res.json({ id });
+});
+
 seedIfEmpty();
 
 app.listen(3000, () => {
