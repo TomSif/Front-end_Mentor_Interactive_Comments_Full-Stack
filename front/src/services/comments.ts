@@ -58,3 +58,28 @@ export const patchVote = async (
   }
   return res.json()
 }
+
+export const patchEdit = async (
+  id: number,
+  content: string
+): Promise<{ id: number; content: string }> => {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/comments/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content }),
+  })
+  if (!res.ok) {
+    throw new Error('Failed to Edit')
+  }
+  return res.json()
+}
+
+export const deleteComment = async (id: number): Promise<{ id: number }> => {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/comments/${id}`, {
+    method: 'DELETE',
+  })
+  if (!res.ok) {
+    throw new Error('Failed to delete')
+  }
+  return res.json()
+}

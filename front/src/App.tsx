@@ -5,6 +5,8 @@ import getCommentsData, {
   postComment,
   postReply,
   patchVote,
+  patchEdit,
+  deleteComment,
 } from '@/services/comments'
 import CommentCard from './components/CommentCard'
 import CommentInput from './components/CommentInput'
@@ -56,10 +58,16 @@ function App() {
 
   const handleEdit = (id: number, newContent: string) => {
     setComments((prev) => applyEdit(prev, id, newContent))
+    patchEdit(id, newContent).catch((err) => {
+      if (err instanceof Error) setError(err.message)
+    })
   }
 
   const handleDelete = (deletingId: number) => {
     setComments((prev) => applyDelete(prev, deletingId))
+    deleteComment(deletingId).catch((err) => {
+      if (err instanceof Error) setError(err.message)
+    })
   }
 
   useEffect(() => {
