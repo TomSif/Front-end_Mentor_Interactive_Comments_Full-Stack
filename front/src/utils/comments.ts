@@ -1,4 +1,4 @@
-import { Comment, User, Reply } from '@/types'
+import { Comment } from '@/types'
 
 export const applyVote = (
   comments: Comment[],
@@ -18,32 +18,6 @@ export const applyVote = (
           ),
         }
   )
-}
-
-export const buildComment = (content: string, currentUser: User): Comment => {
-  return {
-    id: Number(Date.now()),
-    content: content,
-    createdAt: 'Just now',
-    score: 0,
-    user: currentUser!,
-    replies: [],
-  }
-}
-
-export const buildReply = (
-  userName: string,
-  content: string,
-  currentUser: User
-): Reply => {
-  return {
-    id: Number(Date.now()),
-    content,
-    createdAt: 'Just now',
-    score: 0,
-    replyingTo: userName,
-    user: currentUser!,
-  }
 }
 
 export const applyEdit = (

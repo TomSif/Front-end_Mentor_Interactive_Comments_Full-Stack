@@ -1,11 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import {
-  applyVote,
-  buildComment,
-  buildReply,
-  applyEdit,
-  applyDelete,
-} from './comments'
+import { applyVote, applyEdit, applyDelete } from './comments'
 
 const comments = [
   {
@@ -70,50 +64,6 @@ describe('applyVote', () => {
   })
 })
 
-describe('buildComment', () => {
-  it('create a new comment', () => {
-    // Arrange
-    const content = 'test'
-    const currentUser = {
-      image: {
-        png: '/images/avatars/image-juliusomo.png',
-        webp: '/images/avatars/image-juliusomo.webp',
-      },
-      username: 'juliusomo',
-    }
-    // Act
-    const result = buildComment(content, currentUser)
-    // Assert
-    expect(result.content).toBe('test')
-    expect(result.createdAt).toBe('Just now')
-    expect(result.score).toBe(0)
-    expect(result.user).toEqual(currentUser)
-    expect(result.replies).toEqual([])
-  })
-})
-
-describe('buildReply', () => {
-  it('create a new reply', () => {
-    // Arrange
-    const userName = 'maxblagun'
-    const content = 'test'
-    const currentUser = {
-      image: {
-        png: '/images/avatars/image-juliusomo.png',
-        webp: '/images/avatars/image-juliusomo.webp',
-      },
-      username: 'juliusomo',
-    }
-    // Act
-    const result = buildReply(userName, content, currentUser)
-    // Assert
-    expect(result.content).toBe('test')
-    expect(result.createdAt).toBe('Just now')
-    expect(result.score).toBe(0)
-    expect(result.user).toEqual(currentUser)
-    expect(result.replyingTo).toBe('maxblagun')
-  })
-})
 describe('applyEdit', () => {
   it('change the content of a comment', () => {
     // Arrange
