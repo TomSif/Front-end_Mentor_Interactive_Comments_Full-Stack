@@ -1,6 +1,8 @@
 import { DatabaseSync } from "node:sqlite";
 
-const db = new DatabaseSync("data.sqlite");
+const DB_PATH = process.env.DB_PATH ?? "data.sqlite";
+
+const db = new DatabaseSync(DB_PATH);
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS comments (
