@@ -63,9 +63,9 @@ function App() {
     })
   }
 
-  const handleDelete = (deletingId: number) => {
-    setComments((prev) => applyDelete(prev, deletingId))
-    deleteComment(deletingId).catch((err) => {
+  const handleDelete = (id: number) => {
+    setComments((prev) => applyDelete(prev, id))
+    deleteComment(id).catch((err) => {
       if (err instanceof Error) setError(err.message)
     })
   }
@@ -176,7 +176,8 @@ function App() {
               </button>
               <button
                 onClick={() => {
-                  handleDelete(deletingId!)
+                  if (deletingId === null) return
+                  handleDelete(deletingId)
                   setIsOpen(false)
                 }}
                 className="w-full rounded-lg bg-pink-400 py-3 text-center text-white"
