@@ -182,7 +182,7 @@ With 24 Vitest + RTL tests covering both pure utility functions and `CommentCard
 
 This project was built with AI-assisted mentoring (Claude). The approach: I code by hand, Claude acts as a Socratic mentor — asking questions, explaining concepts, reviewing my reasoning. The architectural decisions stayed mine to make.
 
-Specific AI contributions are documented transparently in my [progression log](./progression.md):
+Specific AI contributions, documented transparently on my portfolio's devlog for this project:
 
 - **Written by Claude:** direct, fully commented explanations on genuinely new ground — the recursive-component pattern, the two-level immutable update on nested state, the `useRef`-as-flag pattern for guarding an effect on first render, and the RTL/`userEvent` async testing cycle
 - **My initiative:** recognizing that recursion-local data (`replyingTo`) never needs to be lifted to `App`; choosing `disabled` + Tailwind's `disabled:` variants for restricting votes on my own comments; extracting pure functions out of `App.tsx` handlers into `utils/comments.ts` after a single explanation of the pattern; reasoning through the `utils/` vs `services/` distinction on my own
