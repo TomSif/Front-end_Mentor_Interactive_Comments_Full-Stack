@@ -128,6 +128,12 @@ app.patch("/comments/:id/vote", (req, res) => {
   const { direction } = req.body;
   const delta = direction === "up" ? 1 : -1;
 
+  const item = db.prepare("SELECT username FROM comments WHERE id = ?").get(id);
+
+  if (!item || item.username === currentUser.username) {
+    return res.status(403).json({ error: "Not allowed" });
+  }
+
   db.prepare("UPDATE comments SET score = score + ? WHERE id = ?").run(
     delta,
     id,

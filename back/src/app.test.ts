@@ -49,6 +49,30 @@ describe("POST /comments/:id/replies", () => {
 });
 describe("PATCH /comments/:id/vote", () => {
   it("returns 200 and increase the vote of a comment", async () => {
+    // Arrange — Direct insert
+    const insert = db
+      .prepare(
+        `
+      INSERT INTO comments (content, created_at, score, username, image_png, image_webp, parent_id, replying_to)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `,
+      )
+      .run("not mine", "Just now", 0, "someoneelse", "", "", null, null);
+
+    const otherId = Number(insert.lastInsertRowid);
+
+    // Act
+    const res = await request(app)
+      .patch(`/comments/${otherId}/vote`)
+      .send({ direction: "up" });
+
+    // Assert
+    expect(res.status).toBe(200);
+    expect(res.body.score).toBe(1);
+  });
+});
+describe("PATCH /comments/:id/vote", () => {
+  it("returns 403 and does not increase the vote of a comment", async () => {
     // Arrange
     const parentRes = await request(app)
       .post("/comments")
@@ -61,8 +85,7 @@ describe("PATCH /comments/:id/vote", () => {
       .send({ direction: "up" });
 
     // Assert
-    expect(res.status).toBe(200);
-    expect(res.body.score).toBe(1);
+    expect(res.status).toBe(403);
   });
 });
 describe("PUT /comments/:id", () => {
