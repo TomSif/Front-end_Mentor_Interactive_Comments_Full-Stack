@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import db from "./db.js";
+import db, { insertCommentRow } from "./db.js";
 
 export const seedIfEmpty = () => {
   const { count } = db
@@ -14,32 +14,28 @@ export const seedIfEmpty = () => {
   const cleaned = rawContent.replace(/^\uFEFF/, "");
   const data = JSON.parse(cleaned);
 
-  const insertComment = db.prepare(
-    "INSERT INTO comments (content,created_at,score,username,image_png,image_webp,parent_id,replying_to) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-  );
-
   for (const comment of data.comments) {
-    const result = insertComment.run(
-      comment.content,
-      comment.createdAt,
-      comment.score,
-      comment.user.username,
-      comment.user.image.png,
-      comment.user.image.webp,
-      null,
-      null,
-    );
+    const result = insertCommentRow({
+      content: comment.content,
+      createdAt: comment.createdAt,
+      score: comment.score,
+      username: comment.user.username,
+      imagePng: comment.user.image.png,
+      imageWebp: comment.user.image.webp,
+      parentId: null,
+      replyingTo: null,
+    });
     for (const reply of comment.replies) {
-      insertComment.run(
-        reply.content,
-        reply.createdAt,
-        reply.score,
-        reply.user.username,
-        reply.user.image.png,
-        reply.user.image.webp,
-        result.lastInsertRowid,
-        reply.replyingTo,
-      );
+      insertCommentRow({
+        content: reply.content,
+        createdAt: reply.createdAt,
+        score: reply.score,
+        username: reply.user.username,
+        imagePng: reply.user.image.png,
+        imageWebp: reply.user.image.webp,
+        parentId: Number(result.lastInsertRowid),
+        replyingTo: reply.replyingTo,
+      });
     }
   }
 };

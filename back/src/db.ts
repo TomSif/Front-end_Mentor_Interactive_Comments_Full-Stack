@@ -18,3 +18,34 @@ db.exec(`
   )
 `);
 export default db;
+
+export interface InsertCommentRowParams {
+  content: string;
+  createdAt: string;
+  score: number;
+  username: string;
+  imagePng: string;
+  imageWebp: string;
+  parentId: number | null;
+  replyingTo: string | null;
+}
+
+export const insertCommentRow = (row: InsertCommentRowParams) => {
+  const insert = db.prepare(`
+      INSERT INTO comments (content, created_at, score, username, image_png, image_webp, parent_id, replying_to)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+  const result = insert.run(
+    row.content,
+    row.createdAt,
+    row.score,
+    row.username,
+    row.imagePng,
+    row.imageWebp,
+    row.parentId,
+    row.replyingTo,
+  );
+
+  return result;
+};

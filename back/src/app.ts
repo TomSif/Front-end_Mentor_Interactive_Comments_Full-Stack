@@ -1,5 +1,5 @@
 import express from "express";
-import db from "./db.js";
+import db, { insertCommentRow } from "./db.js";
 import cors from "cors";
 
 const app = express();
@@ -63,21 +63,16 @@ app.get("/comments", (req, res) => {
 app.post("/comments", (req, res) => {
   const { content } = req.body;
 
-  const insert = db.prepare(`
-    INSERT INTO comments (content, created_at, score, username, image_png, image_webp, parent_id, replying_to)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-
-  const result = insert.run(
+  const result = insertCommentRow({
     content,
-    "Just now",
-    0,
-    currentUser.username,
-    currentUser.image.png,
-    currentUser.image.webp,
-    null,
-    null,
-  );
+    createdAt: "Just now",
+    score: 0,
+    username: currentUser.username,
+    imagePng: currentUser.image.png,
+    imageWebp: currentUser.image.webp,
+    parentId: null,
+    replyingTo: null,
+  });
 
   const newComment = {
     id: Number(result.lastInsertRowid),
@@ -95,21 +90,16 @@ app.post("/comments/:id/replies", (req, res) => {
   const parentId = Number(req.params.id);
   const { content, replyingTo } = req.body;
 
-  const insert = db.prepare(`
-    INSERT INTO comments (content, created_at, score, username, image_png, image_webp, parent_id, replying_to)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-  `);
-
-  const result = insert.run(
+  const result = insertCommentRow({
     content,
-    "Just now",
-    0,
-    currentUser.username,
-    currentUser.image.png,
-    currentUser.image.webp,
-    parentId,
-    replyingTo,
-  );
+    createdAt: "Just now",
+    score: 0,
+    username: currentUser.username,
+    imagePng: currentUser.image.png,
+    imageWebp: currentUser.image.webp,
+    parentId: parentId,
+    replyingTo: replyingTo,
+  });
 
   const newReply = {
     id: Number(result.lastInsertRowid),
